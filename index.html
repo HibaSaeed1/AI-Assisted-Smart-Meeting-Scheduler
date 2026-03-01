@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>AI Smart Meeting Scheduler</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<div class="container">
+    <h1>AI Smart Meeting Scheduler</h1>
+
+    {% if auth_url %}
+        <a href="{{ auth_url }}"><button>Sign in</button></a>
+    {% endif %}
+
+    {% if message %}
+        <div class="message">{{ message }}</div>
+    {% endif %}
+
+    {% if slots and slots|length > 0 %}
+        <h3>AI Ranked Available Slots</h3>
+        <ul>
+            {% for slot in slots %}
+                <li>{{ slot.date }} | {{ slot.start }} - {{ slot.end }} (Priority Score: {{ slot.score }})</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    {% if not auth_url %}
+        <h2>Book Meeting</h2>
+        <form action="/book" method="post">
+            <label>Date:</label>
+            <input type="date" name="date" required>
+
+            <label>Start Time:</label>
+            <input type="time" name="start" required>
+
+            <label>End Time:</label>
+            <input type="time" name="end" required>
+
+            <button type="submit">Book Meeting</button>
+        </form>
+
+        <form action="/logout" method="post" style="margin-top:10px;">
+            <button type="submit">Logout</button>
+        </form>
+    {% endif %}
+
+    {% if booked and booked|length > 0 %}
+        <h3>Booked Meetings</h3>
+        <ul>
+            {% for meeting in booked %}
+                <li>{{ meeting.date }} | {{ meeting.start }} - {{ meeting.end }} (Booked by: {{ meeting.email }})</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+</div>
+</body>
+</html>
